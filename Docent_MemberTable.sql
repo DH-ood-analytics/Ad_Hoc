@@ -1,0 +1,1 @@
+SELECT distinct a.patient_id FROM source_mls.mls_docent_journey as a JOIN source_mls.mls_docent_journeyevent as b ON a.id = b.journey_id;
