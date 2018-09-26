@@ -21,6 +21,16 @@ names(emmiengage) <- nm
 
 emmiengage$identifier <- paste(emmiengage$patient_first_name, emmiengage$patient_last_name, emmiengage$patient_dob)
 
+#do some checks - Shez has flagged these numbers as 'in error'
+length(unique(emmiengage$identifier))
+check1 <- emmiengage %>% group_by(date_issued) %>% summarise("count_distinct" = n_distinct(identifier), "count"=n())
+check1$date_issued <- as.Date(as.character(check1$date_issued), format="%Y%m%d")
+check1$yearmon <- paste(year(check1$date_issued), month(check1$date_issued), sep = "-")
+check2 <- check1 %>% group_by(yearmon) %>% summarise(sum(count_distinct), sum(count))
+setwd("C:/Users/tvickers/Desktop")
+write.csv(check2, "emmiengage_tally_bymonth.csv", row.names=F)
+# end shez checks
+
 step1 <- emmiengage %>% group_by(identifier, date_issued) %>% tally()
 
 step2 <- ddply(step1, ~ identifier, summarize, min(date_issued))

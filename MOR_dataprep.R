@@ -3,7 +3,8 @@ username <- Sys.getenv("USERNAME")
 #######################
 
 require(dplyr)
-require(gpplot2)
+require(ggplot2)
+require(scales)
 
 #grab the date_table
 setwd(paste0("C:/Users/", username, "/Documents/GitRepositories/Utility_Scripts"))
@@ -53,9 +54,11 @@ fad_users_quarter_clean <- merge(fad_users_quarter, unique(subset(date_table, se
 #create curves
 
 #fad
-ggplot(fad_clean_2b, aes(date, fad_searches)) + geom_smooth(method = "auto") + geom_line(alpha = 0.25) + ggtitle("FAD Searches") + xlab("Date") + ylab("Profile Views") + theme_bw() + theme(plot.title = element_text(hjust=0.5)) + scale_y_continuous(labels=comma)
+ggplot(fad_clean_2b, aes(date, fad_searches)) + geom_smooth(method = "auto") + geom_line(alpha = 0.25) + ggtitle("Searches") + xlab("Date") + ylab("Searches") + theme_bw() + theme(plot.title = element_text(hjust=0.5)) + scale_y_continuous(labels=comma)
 #profile views
-ggplot(profview_clean_2c, aes(date, profile_views)) + geom_smooth(method = "auto") + geom_line(alpha = 0.25) + ggtitle("Profile Views") + xlab("Date") + ylab("Profile Views") + theme_bw() + theme(plot.title = element_text(hjust=0.5)) + scale_y_continuous(labels=comma)
+ggplot(profview_clean_2c, aes(date, profile_views)) + geom_smooth(method = "auto") + geom_line(alpha = 0.25) + ggtitle("MD Profile Views") + xlab("Date") + ylab("Profile Views") + theme_bw() + theme(plot.title = element_text(hjust=0.5)) + scale_y_continuous(labels=comma)
+#fad_users - BY MONTH
+ggplot(fad_users_month_clean, aes(month, user_count)) + geom_smooth(method ="auto") +geom_line(alpha = 0.25) + ggtitle("FAD Users - by month") + xlab("Month") + ylab("FAD Users") + theme_bw() + theme(plot.title = element_text(hjust=0.5)) + scale_y_continuous(labels=comma)
 
 #write out the results
 setwd(paste0("C:/Users/", username ,"/Box Sync/github_local/Ad hoc/MOR/input/cleaned"))
