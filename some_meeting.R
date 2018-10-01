@@ -35,53 +35,6 @@ next_desperation_function <- function(list_input) {
 setwd(paste0("C:/Users/", username, "/Documents/GitRepositories/Utility_Scripts"))
 source("generateDateTable.R")
 
-setwd("C:/Users/tvickers/Box Sync/github_local/Ad hoc/some_meeting/Okta/test_data")
-dir()
-
-Okta_AR <- read.csv("MLSDataSourcing_CIAM_AccessRelationship_09132018.csv", stringsAsFactors = F, sep = "|")
-Okta_DM <- read.csv("MLSDataSourcing_CIAM_Demograhpics_09132018.csv", stringsAsFactors = F, sep = "|")
-Okta_AP <- read.csv("MLSDataSourcing_CIAM_Appointment_09132018.csv", stringsAsFactors = F, sep = "|")
-
-NROW(unique(subset(Okta_DM, select =c(PersonId, FirstName, LastName))))
-length(unique(Okta_DM$PersonId))
-
-
-#get fullnames
-dm_fn <- paste(Okta_DM$FirstName, Okta_DM$LastName, sep = " ")
-dm_fn <- unique(dm_fn)
-dm_fn <- tolower(dm_fn)
-dm_fn <- data.frame("fullname" = dm_fn)
-
-setwd("C:/Users/tvickers/Desktop")
-write.csv(dm_fn, "check_dm_fn.csv", row.names=F)
-
-
-dm_fn$zztest <- grepl("zztest", dm_fn$fullname)
-dm_fn$test <- grepl("test", dm_fn$fullname)
-dm_fn$string1 <- grepl("string1", dm_fn$fullname)
-dm_fn$abcdef <- grepl("abc def", dm_fn$fullname)
-dm_fn$awdemo <- grepl("awdemo", dm_fn$fullname)
-dm_fn$amwelldemo <- grepl("amwell demo", dm_fn$fullname)
-dm_fn$azuresearch <- grepl("azure search", dm_fn$fullname)
-dm_fn$slot1 <- grepl("slot1", dm_fn$fullname)
-dm_fn$cragdw <- grepl("craigdw", dm_fn$fullname)
-dm_fn$slotone <- grepl("slotone", dm_fn$fullname)
-dm_fn$curbside <- grepl("curbside", dm_fn$fullname)
-dm_fn$ddfdfdfgg <- grepl("ddfd fdfgg", dm_fn$fullname)
-dm_fn$ddferfwe <- grepl("ddfer fwe", dm_fn$fullname)
-dm_fn$Dec14 <- grepl("Dec14 Dec14", dm_fn$fullname)
-dm_fn$Dec1417 <- grepl("Dec1417 Dec1417", dm_fn$fullname)
-dm_fn$Dec20 <- grepl("Dec20 Dec20", dm_fn$fullname)
-dm_fn$dec27 <- grepl("dec27 dec27", dm_fn$fullname)
-dm_fn$dfvfbhg <- grepl("df vfbhg", dm_fn$fullname)
-dm_fn$ineda <- grepl("ineda", dm_fn$fullname)
-
-dm_fn$is_a_test <- rowSums(dm_fn[,2:20])
-
-setwd("C:/Users/tvickers/Desktop")
-write.csv(dm_fn, "check_dm_fn_withtest.csv", row.names=F)
-
-
 setwd("C:/Users/tvickers/Box Sync/github_local/Ad hoc/some_meeting")
 dhome_from_iq <- read.table("dhomeid_from_iq.txt", sep="\t", quote="", fill=T, comment.char = "", stringsAsFactors = F)
 names(dhome_from_iq) <- c("firstname", "lastname", "clientid", "dhomeid")
@@ -100,7 +53,7 @@ prod_ciam$lastname <- tolower(prod_ciam$lastname)
 prod_ciam$fullname <- paste(prod_ciam$firstname, prod_ciam$lastname, sep = " ")
 prod_ciam$istest <- grepl("albers|test|eimer.org|geoff warren|nichole mccloud|meredith mcneill|prod725|prod-ilir-5-3 prod|asdfasdf|hello there|foo bar|meredithprod2|demo amwell|my home demo|tawnya prod 0706 v2|tawnya prod 14|tawnya prod created 5/3|r12 tawnya prod account|tawnya prod created 7/6|tawnya infantino - hotmail2|tawnya prod 3", prod_ciam$fullname)
 
-setwd("C:/Users/tvickers/Box Sync/github_local/Ad hoc/some_meeting")
+setwd("C:/Users/tvickers/Box Sync/github_local/Ad hoc/Consumer_Patient_Engagement/archive")
 
 new_com_df_names <- c("Charges_Units", "Charges_Frequency", "Charges_ChargeAmount", "ChargesWorkRVUBase", "Charges_TotalAdjustedRVUBase", "ChargeInformation_InvoiceNumber",
   "ChargeInformation_TransactionSequence", "ChargeInformation_VisitCategory", "ChargeInformation_IsOriginalInvoice", "ChargeInformation_IsChargeCorrectedInvoice",
@@ -134,8 +87,8 @@ est_comm_df <- cbind(est_comm_df, keys)
 
 all_comm_df <- rbind(new_comm_df, est_comm_df)
 
-#new_comm_df$service_date <- as.Date(strftime(new_comm_df$servicedate_date))
-#new_comm_df_withdate <- merge(new_comm_df, date_table, by.x="service_date", by.y = "day", all.x=T)
+new_comm_df$service_date <- as.Date(strftime(new_comm_df$servicedate_date))
+new_comm_df_withdate <- merge(new_comm_df, date_table, by.x="service_date", by.y = "day", all.x=T)
 
 all_comm_df$service_date <- as.Date(strftime(all_comm_df$servicedate_date))
 all_comm_df_withdate <- merge(all_comm_df, date_table, by.x="service_date", by.y = "day", all.x=T)
@@ -273,7 +226,9 @@ ncomm_20180901 <- new_comm_df_withdate %>% filter(yyyy_mm_dd=="2018-09-01")
 pcntdob_20180901 <- prod_ciam_nt_withdob_key %>% filter(yyyy_mm_dd=="2018-09-01")
 pcntnodob_20180901 <- prod_ciam_nt_withoutdob_key %>% filter(yyyy_mm_dd=="2018-09-01")
 
-ncomm_allyear <- new_comm_df_withdate %>% filter(yyyy_mm_dd>="2017-09-01" & yyyy_mm_dd <= "2018-08-01")
+ncomm_allyear <- new_comm_df_withdate %>% filter(yyyy_mm_dd>="2017-07-01" & yyyy_mm_dd <= "2018-06-30")
+
+
 pcntdob_allyear <- prod_ciam_nt_withdob_key %>% filter(yyyy_mm_dd>="2017-09-01" & yyyy_mm_dd <= "2018-08-01")
 pcntnodob_allyear <- prod_ciam_nt_withoutdob_key %>% filter(yyyy_mm_dd>="2017-09-01" & yyyy_mm_dd <= "2018-08-01")
 

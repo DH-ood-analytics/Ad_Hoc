@@ -1,0 +1,1 @@
+SELECT * FROM source_mls.mls_adtall WHERE LOWER(TRIM(financialclassdescription))='commercial' AND LOWER(TRIM(adtsystemname))='ms4'
